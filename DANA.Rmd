@@ -1,0 +1,60 @@
+---
+title: "Heart_Disease_Analysis"
+author: "GROUP 4"
+date: "2023-11-02"
+output: html_document
+---
+
+```{r}
+heart <- read.csv("heart_disease_uci.csv", header = T)
+head(heart)
+```
+
+
+### 1. Describe the distribution of chest pain types (cp) in patients with potential heart disease.
+```{r}
+cp_freq <- table(heart$cp)
+cp_rel_freq <- cp_freq/sum(cp_freq) * 100
+
+barplot(cp_rel_freq, ylim = c(0, 60), main = "Frequency of Chest Pain Types in People with Potential Heart Disease",
+        xlab = "Chest Pain Types", ylab = "Count", )
+pie(cp_freq)
+```
+
+### 2. Describe the distribution of ecg observation at resting condition (restecg) in patients with potential heart disease.
+```{r}
+ecg_freq <- table(heart$restecg)
+ecg_rel_freq <- ecg_freq/sum(ecg_freq) * 100
+
+barplot(ecg_rel_freq, ylim = c(0, 60), main = "Frequency of Resting ECG Measurements in People with Potential Heart Disease",
+        xlab = "ECG", ylab = "Count")
+pie(ecg_freq)
+```
+
+### 3. Describe the distribution of cholesterol level (chol) in patients with potential heart disease.
+```{r}
+hist(heart$chol)
+boxplot(heart$chol, horizontal = T)
+```
+
+### Lots of outliers...
+
+### 4. Is there a correlation between age and maximum heart rate (thalch) in patients?
+```{r}
+cor(heart$thalch, heart$age, use = "complete.obs")
+plot(heart$age, heart$thalch, ylim = c(25, 250), xlim = c(25, 80))
+lm(heart$age ~ heart$thalch)
+```
+
+### 5. Is there a relationship between cholesterol levels (chol) and geographic regions (origin)?
+```{r}
+boxplot(heart$chol ~ heart$dataset)
+```
+
+### limitations: a lot of 0's for cholesterol levels...
+
+### 6. Are sex and presence of exercise induced angina (exang) independent of each other?
+```{r}
+table()
+```
+
