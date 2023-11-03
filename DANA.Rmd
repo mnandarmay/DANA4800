@@ -55,6 +55,17 @@ boxplot(heart$chol ~ heart$dataset)
 
 ### 6. Are sex and presence of exercise induced angina (exang) independent of each other?
 ```{r}
-table()
+angina_freq <- table(heart$sex, heart$exang)
+barplot(angina_freq, legend.text = c("Female", "Male"), col = c("pink", "lightblue"), ylab = "Count", xlab = "Exercise Induced Angina", beside = T)
 ```
 
+### There does not seem to be any association as the distribution for **sex** in the bars is similar for different levels of the **angina** variable.
+
+### H0 - sex and exercise induced angina are independent of each other
+### H1 - sex and exercise induced angina are not independent of each other
+```{r}
+chisq.test(angina_freq)
+```
+
+### df = 1; DP = 3.84
+### X-squared of 27.582 > DP of 3.84... reject H0 so that there are some association present between the variables **sex** and **exang**.
