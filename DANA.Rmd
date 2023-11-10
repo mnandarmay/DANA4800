@@ -8,6 +8,9 @@ output: html_document
 ```{r}
 heart <- read.csv("heart_disease_uci.csv", header = T)
 head(heart)
+
+heart <- heart[,c("age", "sex", "dataset", "cp", "chol", "restecg", "thalch", "exang")]
+head(heart)
 ```
 
 
@@ -16,8 +19,8 @@ head(heart)
 cp_freq <- table(heart$cp)
 cp_rel_freq <- cp_freq/sum(cp_freq) * 100
 
-barplot(cp_rel_freq, ylim = c(0, 60), main = "Frequency of Chest Pain Types in People with Potential Heart Disease",
-        xlab = "Chest Pain Types", ylab = "Count", )
+barplot(cp_rel_freq, ylim = c(0, 60), xlab = "Chest Pain Types", ylab = "Count",
+        main = "Frequency of Chest Pain Types in People with Potential Heart Disease")
 pie(cp_freq)
 ```
 
@@ -26,13 +29,16 @@ pie(cp_freq)
 ecg_freq <- table(heart$restecg)
 ecg_rel_freq <- ecg_freq/sum(ecg_freq) * 100
 
-barplot(ecg_rel_freq, ylim = c(0, 60), main = "Frequency of Resting ECG Measurements in People with Potential Heart Disease",
-        xlab = "ECG", ylab = "Count")
+barplot(ecg_rel_freq, ylim = c(0, 60), xlab = "ECG", ylab = "Count", main = "Frequency of Resting ECG Measurements in People with Potential Heart Disease")
+
 pie(ecg_freq)
 ```
 
 ### 3. Describe the distribution of cholesterol level (chol) in patients with potential heart disease.
 ```{r}
+### mean replace missing values in cholesterol levels:
+heart$chol[is.na(heart$chol)] <- mean(heart$chol,na.rm=TRUE)
+
 hist(heart$chol)
 boxplot(heart$chol, horizontal = T)
 ```
@@ -41,22 +47,38 @@ boxplot(heart$chol, horizontal = T)
 
 ### 4. Is there a correlation between age and maximum heart rate (thalch) in patients?
 ```{r}
-cor(heart$thalch, heart$age, use = "complete.obs")
-plot(heart$age, heart$thalch, ylim = c(25, 250), xlim = c(25, 80))
-lm(heart$age ~ heart$thalch)
+# replace missing values with mean value
+heart$thalch[is.na(heart$thalch)] <- mean(heart$thalch,na.rm=TRUE)
+
+cor(heart$thalch, heart$age)
+plot(heart$age, heart$thalch, ylim = c(25, 250), xlim = c(25, 80),
+     xlab = "Age", ylab = "Max Heart Rate", main = "Max Heart Rate by Age")
+age_thalch_ls <- lm(heart$thalch ~ heart$age)
+summary(age_thalch_ls)
 ```
+
+The relationship between maximum heart rate (thalch) and age is weak and negative. Maximum heart rate decreases as age increases. 
+
+The correlation coefficient between the variables is -0.35, indicating a low negative correlation between the variables.
+
+The regression model of thalch and age is:
+
+    maximum heart rate = - 0.94281 * age + 187.99649
+  
+The slope of -0.943 indicates an increase in age would decrease maximum heart rate by 0.943. The intercept of 187.996 represents the maximum heart rate of a new born baby.
 
 ### 5. Is there a relationship between cholesterol levels (chol) and geographic regions (origin)?
 ```{r}
 boxplot(heart$chol ~ heart$dataset)
 ```
 
-### limitations: a lot of 0's for cholesterol levels...
+### limitations: a lot of 0's for cholesterol levels... all of switzerland's dataset have 0 for cholesterol levels
 
 ### 6. Are sex and presence of exercise induced angina (exang) independent of each other?
 ```{r}
 angina_freq <- table(heart$sex, heart$exang)
-barplot(angina_freq, legend.text = c("Female", "Male"), col = c("pink", "lightblue"), ylab = "Count", xlab = "Exercise Induced Angina", beside = T)
+barplot(angina_freq, legend.text = c("Female", "Male"), col = c("pink", "lightblue"),
+        ylab = "Count", xlab = "Exercise Induced Angina", beside = T)
 ```
 
 ### There does not seem to be any association as the distribution for **sex** in the bars is similar for different levels of the **angina** variable.
