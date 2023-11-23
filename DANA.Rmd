@@ -9,7 +9,12 @@ output: html_document
 heart <- read.csv("heart_disease_uci.csv", header = T)
 head(heart)
 
-heart <- heart[,c("age", "sex", "dataset", "cp", "chol", "restecg", "thalch", "exang")]
+heart <- heart[,c("age", "sex", "dataset", "cp", "chol", "thalch", "exang")]
+heart$sex <- as.factor(heart$sex)
+heart$dataset <- as.factor(heart$dataset)
+heart$cp <- as.factor(heart$cp)
+heart$exang <- as.factor(heart$exang)
+
 head(heart)
 ```
 
@@ -20,22 +25,22 @@ cp_freq <- table(heart$cp)
 cp_rel_freq <- cp_freq/sum(cp_freq) * 100
 
 barplot(cp_rel_freq, ylim = c(0, 60), xlab = "Chest Pain Types", ylab = "Count",
+        #names.arg = c("asymptomatic", "non-anginal", "atypical angina", "typical angina"),
         main = "Frequency of Chest Pain Types in People with Potential Heart Disease")
-pie(cp_freq)
+
+
+categories <- c("Asymptomatic", "Non-angina", "Atypical angina", "Typical angina")
+values <- c(53.91304, 22.17391, 18.91304, 5.00000)
+
+# Create a bar plot
+barplot(values, names.arg = categories, col = "skyblue",
+        main = "Distribution Bar Graph",
+        xlab = "Chest pain types", ylab = "Percentage")
+
+
 ```
 
-### 2. Describe the distribution of ecg observation at resting condition (restecg) in patients with potential heart disease.
-
-```{r}
-ecg_freq <- table(heart$restecg)
-ecg_rel_freq <- ecg_freq/sum(ecg_freq) * 100
-
-barplot(ecg_rel_freq, ylim = c(0, 60), xlab = "ECG", ylab = "Count", main = "Frequency of Resting ECG Measurements in People with Potential Heart Disease")
-
-pie(ecg_freq)
-```
-
-### 3. Describe the distribution of cholesterol level (chol) in patients with potential heart disease.
+### 2. Describe the distribution of cholesterol level (chol) in patients with potential heart disease.
 
 ```{r}
 ### mean replace missing values in cholesterol levels:
@@ -74,6 +79,14 @@ The slope of -0.943 indicates an increase in age would decrease maximum heart ra
 ### 5. Is there a relationship between cholesterol levels (chol) and geographic regions (origin)?
 
 ```{r}
+library(dplyr)
+
+heart <- heart %>%
+  mutate(dataset = case_when(
+    dataset %in% c("Cleveland", "VA Long Beach") ~ "USA",
+    TRUE ~ dataset
+  ))
+
 boxplot(heart$chol ~ heart$dataset)
 ```
 
