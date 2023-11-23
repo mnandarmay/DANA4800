@@ -49,6 +49,8 @@ heart$chol[is.na(heart$chol)] <- mean(heart$chol,na.rm=TRUE)
 hist(heart$chol, xlab = "Choloesterol Levels", main = "Distribution of Cholesterol Levels")
 boxplot(heart$chol, horizontal = T, xlab = "Cholesterol Levels",
         main = "Cholesterol Levels Boxplot")
+
+summary(heart$chol)
 ```
 
 The histogram of cholosterol levels is right skewed with many values at 0 with potential outliers present. Additionally, the presence of outliers in both directions is shown in the boxplot.
@@ -87,7 +89,8 @@ heart <- heart %>%
     TRUE ~ dataset
   ))
 
-boxplot(heart$chol ~ heart$dataset)
+boxplot(heart$chol ~ heart$dataset, xlab = "Geographical Region", ylab = "Cholesterol Levels (mg/dL)",
+        col = "mediumpurple2", main = "Cholesterol Distribution in Different Geographical Regions")
 ```
 
 limitations: a lot of 0's for cholesterol levels... all of switzerland's dataset have 0 for cholesterol levels
