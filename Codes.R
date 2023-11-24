@@ -1,20 +1,9 @@
 heart <- read.csv("heart_disease_uci.csv", header = T)
 
 heart <- heart[,c("age", "sex", "dataset", "cp", "chol", "thalch", "exang")]
-heart$sex <- as.factor(heart$sex)
-heart$dataset <- as.factor(heart$dataset)
-heart$cp <- as.factor(heart$cp)
-heart$exang <- as.factor(heart$exang)
 
-library(dplyr)
-
-# Combine Cleveland and VA Long Beach into USA
-heart <- heart %>%
-  mutate(dataset = case_when(
-    dataset %in% c("Cleveland", "VA Long Beach") ~ "USA",
-    TRUE ~ dataset
-  ))
-
+# combine Cleveland and VA Long Beach into USA
+heart$dataset[heart$dataset %in% c('Cleveland', 'VA Long Beach')] <- 'USA'
 head(heart)
 
 # Q1: Describe the distribution of chest pain types (cp) in patients with potential heart disease.

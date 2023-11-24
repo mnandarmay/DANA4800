@@ -10,11 +10,6 @@ heart <- read.csv("heart_disease_uci.csv", header = T)
 head(heart)
 
 heart <- heart[,c("age", "sex", "dataset", "cp", "chol", "thalch", "exang")]
-heart$sex <- as.factor(heart$sex)
-heart$dataset <- as.factor(heart$dataset)
-heart$cp <- as.factor(heart$cp)
-heart$exang <- as.factor(heart$exang)
-
 head(heart)
 ```
 
@@ -81,13 +76,7 @@ The slope of -0.943 indicates an increase in age would decrease maximum heart ra
 ### 5. Is there a relationship between cholesterol levels (chol) and geographic regions (origin)?
 
 ```{r}
-library(dplyr)
-
-heart <- heart %>%
-  mutate(dataset = case_when(
-    dataset %in% c("Cleveland", "VA Long Beach") ~ "USA",
-    TRUE ~ dataset
-  ))
+heart$dataset[heart$dataset %in% c('Cleveland', 'VA Long Beach')] <- 'USA'
 
 boxplot(heart$chol ~ heart$dataset, xlab = "Geographical Region", ylab = "Cholesterol Levels (mg/dL)",
         col = "mediumpurple2", main = "Cholesterol Distribution in Different Geographical Regions")
