@@ -34,7 +34,6 @@ barplot(values, names.arg = categories, col = "skyblue", ylim = c(0, 60),
         xlab = "Chest Pain Types", ylab = "Percentage")
 
 # Q2: Describe the distribution of cholesterol level (chol) in patients with potential heart disease.
-
 heart$chol[is.na(heart$chol)] <- mean(heart$chol, na.rm = T) # mean replace missing values
 
 hist(heart$chol, xlab = "Choloesterol Levels (mg/dL)", main = "Distribution of Cholesterol Levels", col = "plum")
