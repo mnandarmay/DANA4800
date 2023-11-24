@@ -115,4 +115,4 @@ chisq.test(angina_freq)
 
 df = 1; DP = 3.84
 
-X-squared of 27.582 \> DP of 3.84... reject H0 so that there are some association present between the variables **sex** and **exang**.
+X-squared of 27.582 > DP of 3.84... reject H0 so that there are some association present between the variables **sex** and **exang**.
