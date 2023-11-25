@@ -47,6 +47,23 @@ summary(age_thalch_ls)
 boxplot(heart$chol ~ heart$dataset, xlab = "Geographical Region", ylab = "Cholesterol Levels (mg/dL)",
         col = "mediumpurple2", main = "Cholesterol Distribution in Different Geographical Regions")
 
+usa_data <- subset(heart, dataset == "USA")
+hungary_data <- subset(heart, dataset == "Hungary")
+summary(usa_data); summary(hungary_data)
+
+heart$cholesterol_category <- cut(
+  heart$chol,
+  breaks = c(-Inf, 200, 239, Inf),
+  labels = c("normal", "borderline high", "high"),
+  right = FALSE
+)
+
+round(prop.table(table(heart$cholesterol_category, heart$dataset), margin = 2), 2)
+
+chisq.test(table(heart$dataset, heart$cholesterol_category))
+
+round(sd(hungary_data$chol),2); round(sd(usa_data$chol),2)
+
 # Q5: Are sex and presence of exercise induced angina (exang) independent of each other?
 angina_freq <- table(heart$sex, heart$exang) # two-way table
 angina_freq

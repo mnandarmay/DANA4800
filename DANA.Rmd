@@ -1,6 +1,6 @@
 ---
 title: "Heart_Disease_Analysis"
-author: "GROUP 4"
+author: "DANA 4800"
 date: "2023-11-02"
 output: html_document
 ---
@@ -80,6 +80,25 @@ heart$dataset[heart$dataset %in% c('Cleveland', 'VA Long Beach')] <- 'USA'
 
 boxplot(heart$chol ~ heart$dataset, xlab = "Geographical Region", ylab = "Cholesterol Levels (mg/dL)",
         col = "mediumpurple2", main = "Cholesterol Distribution in Different Geographical Regions")
+
+usa_data <- subset(heart, dataset == "USA")
+hungary_data <- subset(heart, dataset == "Hungary")
+summary(usa_data)
+summary(hungary_data)
+
+heart$cholesterol_category <- cut(
+  heart$chol,
+  breaks = c(-Inf, 200, 239, Inf),
+  labels = c("normal", "borderline high", "high"),
+  right = FALSE
+)
+
+round(prop.table(table(heart$cholesterol_category, heart$dataset), margin = 2), 2)
+
+chisq.test(table(heart$dataset, heart$cholesterol_category))
+
+round(sd(hungary_data$chol),2)
+round(sd(usa_data$chol),2)
 ```
 
 limitations: a lot of 0's for cholesterol levels... all of switzerland's dataset have 0 for cholesterol levels
